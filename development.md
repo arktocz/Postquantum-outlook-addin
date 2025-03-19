@@ -30,14 +30,17 @@
 - instalation:
     -npm install crypto-browserify vm-browserify stream-browserify
 - editation of module.exports in webpack.config.js:
-    ```resolve: {
+    ```
+    resolve: {
       extensions: [".html", ".js"],
       fallback: {
         crypto: require.resolve("crypto-browserify"),
         vm: require.resolve("vm-browserify"),
         stream: require.resolve("stream-browserify"),
          // Since 'fs' is also causing issues, disable it for browser builds
-      }}
+      }
+    }
+    ```
 
 # Editation of taskpane.html and taskpane.js
 - those files are responsible for basic looks and functionality of the addin
