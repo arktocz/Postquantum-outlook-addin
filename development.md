@@ -12,3 +12,12 @@
 - generated template manifest file doesnt allow addin to be visible outside of reading email
 - new extesnsion point <"MessageComposeCommandSurface">, form <"ItemEdit"> and <"Rule"> entry need to be added to make addin visible for email compose as well
 - re-installation of addin/manifest.xml needs to be done to propagate any changes done in manifest file
+
+# AES module
+- npm install crypto-js
+- this module is needed to source AES functions
+
+# MlKem/Kyber module
+- npm install mlkem
+- this module is needed to source mlkem functions
+- github.com/dajiaji/crystals-kyber-js
