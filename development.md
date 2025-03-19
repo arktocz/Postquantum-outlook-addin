@@ -22,9 +22,6 @@
 - this module is needed to source mlkem functions
 - github.com/dajiaji/crystals-kyber-js
 
-# Editation of taskpane.html and taskpane.js
-- those files are responsible for basic looks and functionality of shown addin
-
 # Adition of polifills
 - some used modules are not suited for browser environment, so these polifills function as fallbacks:
 - crypto-browserify
@@ -40,6 +37,9 @@
         vm: require.resolve("vm-browserify"),
         stream: require.resolve("stream-browserify"),
          // Since 'fs' is also causing issues, disable it for browser builds
-      }```
+      }}
+
+# Editation of taskpane.html and taskpane.js
+- those files are responsible for basic looks and functionality of the addin
 
 
