@@ -5,8 +5,8 @@
 
 /* global document, Office */
 // const {greet} = require('./task1.js');
-const {AESgenerateIV, AES_Encrypt, AES_Decrypt} = require('c:/Users/Arkto/Documents/Diplomka/kyberjs/node_modules/crystals-kyber/OutAES.js');
-const {kyberGenKeys, kyberGenCiphertext_SSK, kyberDecipherCiphertext} = require('c:/Users/Arkto/Documents/Diplomka/kyberbrowser/kyberbrowser.js');
+const {AESgenerateIV, AES_Encrypt, AES_Decrypt} = require('../AES/AES.js');
+const {kyberGenKeys, kyberGenCiphertext_SSK, kyberDecipherCiphertext} = require('../mlkem/kyber768.js');
 
 
 Office.onReady((info) => {

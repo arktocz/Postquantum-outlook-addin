@@ -10,8 +10,8 @@ document.getElementById("inputfile").addEventListener("change", function () {
 
     reader.onload = function () {
         fileContent = reader.result;  // Store content in global variable
-        console.log(fileContent); // Log content to the console
-        document.getElementById("output").textContent = fileContent;
+        // console.log(fileContent); // Log content to the console
+        // document.getElementById("output").textContent = fileContent;
     };
 
     reader.onerror = function () {
