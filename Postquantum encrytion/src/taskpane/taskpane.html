@@ -11,7 +11,7 @@
     <title>Contoso Task Pane Add-in</title>
 
     <!-- Office JavaScript API -->
-    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
 
     <!-- For more information on Fluent UI, visit https://developer.microsoft.com/fluentui#/. -->
     <link rel="stylesheet" href="https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/office-ui-fabric-core/11.1.0/css/fabric.min.css"/>
@@ -23,32 +23,77 @@
 <body class="ms-font-m ms-welcome ms-Fabric">
     <header class="ms-welcome__header ms-bgColor-neutralLighter">
         <img width="90" height="90" src="../../assets/logo-filled.png" alt="Contoso" title="Contoso" />
-        <h1 class="ms-font-su">Welcome</h1>
+        <h1 class="ms-font-su">Postkvantove šifrovaní</h1>
     </header>
     <section id="sideload-msg" class="ms-welcome__main">
         <h2 class="ms-font-xl">Please <a target="_blank" href="https://learn.microsoft.com/office/dev/add-ins/testing/test-debug-office-add-ins#sideload-an-office-add-in-for-testing">sideload</a> your add-in to see app body.</h2>
     </section>
     <main id="app-body" class="ms-welcome__main" style="display: none;">
-        <h2 class="ms-font-xl"> Discover what Office Add-ins can do for you today! </h2>
+        <h2 class="ms-font-xl"> Návod na použití: </h2>
         <ul class="ms-List ms-welcome__features">
             <li class="ms-ListItem">
-                <i class="ms-Icon ms-Icon--Ribbon ms-font-xl"></i>
-                <span class="ms-font-m">Achieve more with Office integration</span>
+                <!-- <i class="ms-Icon ms-Icon--Ribbon ms-font-xl"></i> -->
+                <span class="ms-font-m">1. Doplněk využívá a vytváří klíče z lokální stanice</span>
             </li>
             <li class="ms-ListItem">
-                <i class="ms-Icon ms-Icon--Unlock ms-font-xl"></i>
-                <span class="ms-font-m">Unlock features and functionality</span>
+                <!-- <i class="ms-Icon ms-Icon--Unlock ms-font-xl"></i> -->
+                <span class="ms-font-m">2. Klíče volte adekvátně k požadované operaci</span>
             </li>
             <li class="ms-ListItem">
-                <i class="ms-Icon ms-Icon--Design ms-font-xl"></i>
-                <span class="ms-font-m">Create and visualize like a pro</span>
+                <!-- <i class="ms-Icon ms-Icon--Design ms-font-xl"></i> -->
+                <span class="ms-font-m">3. Rozšifrování emailu lze provést pouze nad otevřeným emailem</span>
+            </li>
+            <li class="ms-ListItem">
+                <!-- <i class="ms-Icon ms-Icon--Design ms-font-xl"></i> -->
+                <span class="ms-font-m">4. Šifrování pomocí Kyber je třeba provádět nad prázdným a neodeslaným emailem.</span>
+            </li>
+            <li class="ms-ListItem">
+                <!-- <i class="ms-Icon ms-Icon--Design ms-font-xl"></i> -->
+                <span class="ms-font-m">5. Šifrování pomocí AES je třeba provádět nad dopsaným a neodeslaným emailem.</span>
             </li>
         </ul>
-        <p class="ms-font-l">Modify the source files, then click <b>Run</b>.</p>
-        <div role="button" id="run" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
+        <p class="ms-font-l">Vyberte, prosím, odpovídající klíčový materiál vůči požadované opraci.</p>
+
+        <!-- <div role="button" id="run" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
             <span class="ms-Button-label">Run</span>
+        </div> -->
+        <input type="file" id="inputfile" />
+        <pre id="output"></pre>
+        <!-- Link to the first JS file -->
+        <script src="keyreader.js"></script>
+        <!-- Link to the second JS file -->
+        <script src="taskpane.js"></script>
+
+        <!-- <div role="button" id="run2" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
+            <span class="ms-Button-label">Run2</span>
+        </div> -->
+        <div role="button" id="GenKyberKeys" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
+            <span class="ms-Button-label">Gen. Kyber klíče</span>
         </div>
-        <p><label id="item-subject"></label></p>
+        <!-- PK INPUT -->
+        <div role="button" id="GenCiphertextkey" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
+            <span class="ms-Button-label">Gen. Ciphertext+Sym.klíč</span>
+        </div>
+        <!-- CYPHERTEXT+SYM KEY OUTPUT -->
+        <!-- ASYM SK KEY INPUT -->
+        <div role="button" id="DeCiphertextkey" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
+            <span class="ms-Button-label">Dešifruj Ciphertext</span>
+        </div>
+        <!-- Cypher it -->
+        <div role="button" id="AESEncrypt" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
+            <span class="ms-Button-label">AES šifruj</span>
+        </div>
+        <!--IV OUTPUT  -->
+        <!-- Decypher it -->
+        <div role="button" id="AESDeciphering" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">
+            <span class="ms-Button-label">AES dešifruj</span>
+        </div>
+        
+
+        <div id="output"></div>
+
+        
+        <span class="my_field"><p><label class="my_field" id="item-subject"></label></p></span>
     </main>
 </body>
 

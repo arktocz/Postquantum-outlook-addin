@@ -1,7 +1,6 @@
 {
   "name": "office-addin-taskpane-js",
   "version": "0.0.1",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS.git"
@@ -28,9 +27,12 @@
   },
   "dependencies": {
     "core-js": "^3.36.0",
+    "crypto-browserify": "^3.12.1",
     "crypto-js": "^4.2.0",
     "mlkem": "^2.3.1",
-    "regenerator-runtime": "^0.14.1"
+    "regenerator-runtime": "^0.14.1",
+    "stream-browserify": "^3.0.0",
+    "vm-browserify": "^1.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",

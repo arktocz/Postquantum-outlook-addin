@@ -21,3 +21,23 @@
 - npm install mlkem
 - this module is needed to source mlkem functions
 - github.com/dajiaji/crystals-kyber-js
+
+# Editation of taskpane.html and taskpane.js
+- those files are responsible for basic looks and functionality of shown addin
+
+# Adition of polifills
+- some used modules are not suited for browser environment, so these polifills function as fallbacks:
+- crypto-browserify
+- vm-browserify
+- stream-browserify
+- instalation:
+    -npm install crypto-browserify vm-browserify stream-browserify
+- editation of module.exports in webpack.config.js:
+    ```resolve: {
+      extensions: [".html", ".js"],
+      fallback: {
+        crypto: require.resolve("crypto-browserify"),
+        vm: require.resolve("vm-browserify"),
+        stream: require.resolve("stream-browserify"),
+         // Since 'fs' is also causing issues, disable it for browser builds
+      }```

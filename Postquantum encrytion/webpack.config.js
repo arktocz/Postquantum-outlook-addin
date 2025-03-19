@@ -26,6 +26,12 @@ module.exports = async (env, options) => {
     },
     resolve: {
       extensions: [".html", ".js"],
+      fallback: {
+        crypto: require.resolve("crypto-browserify"),
+        vm: require.resolve("vm-browserify"),
+        stream: require.resolve("stream-browserify"),
+         // Since 'fs' is also causing issues, disable it for browser builds
+      },
     },
     module: {
       rules: [
