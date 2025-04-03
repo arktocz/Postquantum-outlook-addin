@@ -21,6 +21,9 @@ Office.onReady((info) => {
   }
 });
 
+function genError(error_message) {
+  document.getElementById("output").textContent=error_message;
+}
 
 /**
  * Retrieves the content of a file if available.
@@ -35,6 +38,7 @@ function useFileContent() {
     return fileContent;
   } else {
       console.log("No file content available.");
+      return false;
   }
 }
 
@@ -142,10 +146,23 @@ async function insertMessageIntoEmail(message) {
  */
 async function genKyberCiphertext_outlook() {
   const reciver_pk=useFileContent();
-  const [ciphertext, SSK] = await kyberGenCiphertext_SSK(reciver_pk);
-  downloadFileFromVariable("SSK.txt", SSK);
-  await insertMessageIntoEmail(ciphertext);
+  if (reciver_pk == false) {
+    genError("Nebyl nahrán klíč");
+  }
+  else if (reciver_pk.length != 2368 ) {
+    genError("Byl zvolen špatný klíč");
+  }
+  else {
+    const [ciphertext, SSK] = await kyberGenCiphertext_SSK(reciver_pk);
+    downloadFileFromVariable("SSK.txt", SSK);
+    await insertMessageIntoEmail(ciphertext);
+  }
+  
+  // const [ciphertext, SSK] = await kyberGenCiphertext_SSK(reciver_pk);
+  // downloadFileFromVariable("SSK.txt", SSK);
+  // await insertMessageIntoEmail(ciphertext);
 }
+
 
 async function getEmailBody() {
   return new Promise((resolve, reject) => {
@@ -175,9 +192,17 @@ async function getEmailBody() {
  */
 async function decipherKyberCiphertext_outlook() {
   const reciever_sk=useFileContent();
-  const ciphertext_email= await getEmailBody();
-  const SSK = await kyberDecipherCiphertext(ciphertext_email, reciever_sk);
-  downloadFileFromVariable("SSK.txt", SSK);
+  if (reciever_sk == false) {
+    genError("Nebyl nahrán klíč");
+  }
+  else if (reciever_sk.length != 4800 ) {
+    genError("Byl zvolen špatný klíč");
+  }
+  else {
+    const ciphertext_email= await getEmailBody();
+    const SSK = await kyberDecipherCiphertext(ciphertext_email, reciever_sk);
+    downloadFileFromVariable("SSK.txt", SSK);
+  }
 }
 
 //END OF KYBER CODE
@@ -221,38 +246,46 @@ function copyContentAndOpenNewWindow() {
  * @returns {void} This function does not return a value but modifies the email content directly.
  */
 async function AESCiphering_outlook() {
-  const item = Office.context.mailbox.item;
+  const key=useFileContent();
+  if (key == false) {
+    genError("Nebyl nahrán klíč");
+  }
+  else if (key.length != 64 ) {
+    genError("Byl zvolen špatný klíč");
+  }
+  else {
+    const item = Office.context.mailbox.item;
 
-  // Step 1: Retrieve the current email body
-  item.body.getAsync(Office.CoercionType.Text, function (result) {
-    if (result.status === Office.AsyncResultStatus.Succeeded) {
-      let open_text = result.value; // Get the email content
-      
-      if (!open_text) {
-        console.error("Email body is empty. Nothing to encrypt.");
-        return;
-      }
-
-      // Step 2: Encrypt the email body
-      let iv = AESgenerateIV(); // this function generates a random IV
-      let key = "05c79cc15d40f8339eb7a11bd4a7bfea4e9f7ad5e4f22746b79f83b7e3e460e8"; // Key should be securely stored
-      let key2 = useFileContent();
-      let ciphertext = AES_Encrypt(open_text, key2, iv);
-
-      // Step 3: Replace the email body with the encrypted content
-      let encryptedMessage = `IV: ${iv}\nCiphertext: ${ciphertext}`;
-      item.body.setAsync(encryptedMessage, { coercionType: Office.CoercionType.Text }, function (setResult) {
-        if (setResult.status === Office.AsyncResultStatus.Succeeded) {
-          console.log("Email content replaced with encrypted message.");
-        } else {
-          console.error("Error setting email content:", setResult.error);
+    // Step 1: Retrieve the current email body
+    item.body.getAsync(Office.CoercionType.Text, function (result) {
+      if (result.status === Office.AsyncResultStatus.Succeeded) {
+        let open_text = result.value; // Get the email content
+        
+        if (!open_text) {
+          console.error("Email body is empty. Nothing to encrypt.");
+          return;
         }
-      });
-
-    } else {
-      console.error("Error retrieving email body:", result.error);
-    }
-  });
+  
+        // Step 2: Encrypt the email body
+        let iv = AESgenerateIV(); 
+        // let key = useFileContent();
+        let ciphertext = AES_Encrypt(open_text, key, iv);
+  
+        // Step 3: Replace the email body with the encrypted content
+        let encryptedMessage = `IV: ${iv}\nCiphertext: ${ciphertext}`;
+        item.body.setAsync(encryptedMessage, { coercionType: Office.CoercionType.Text }, function (setResult) {
+          if (setResult.status === Office.AsyncResultStatus.Succeeded) {
+            console.log("Email content replaced with encrypted message.");
+          } else {
+            console.error("Error setting email content:", setResult.error);
+          }
+        });
+  
+      } else {
+        console.error("Error retrieving email body:", result.error);
+      }
+    });
+  }
 }
 
 
@@ -268,38 +301,46 @@ async function AESCiphering_outlook() {
  * @returns {void} This function does not return a value but displays the decrypted content in a new window.
  */
 async function AESDeciphering_outlook() {
-  const item = Office.context.mailbox.item;
+  const key=useFileContent();
+  if (key == false) {
+    genError("Nebyl nahrán klíč");
+  }
+  else if (key.length != 64 ) {
+    genError("Byl zvolen špatný klíč");
+  }
+  else {
+    const item = Office.context.mailbox.item;
 
-  // Step 1: Retrieve the current email body
-  item.body.getAsync(Office.CoercionType.Text, function (result) {
-    if (result.status === Office.AsyncResultStatus.Succeeded) {
-      let encryptedMessage = result.value; // Get the encrypted content
-      
-      if (!encryptedMessage) {
-        console.error("Email body is empty. Nothing to decrypt.");
-        return;
+    // Step 1: Retrieve the current email body
+    item.body.getAsync(Office.CoercionType.Text, function (result) {
+      if (result.status === Office.AsyncResultStatus.Succeeded) {
+        let encryptedMessage = result.value; // Get the encrypted content
+        
+        if (!encryptedMessage) {
+          console.error("Email body is empty. Nothing to decrypt.");
+          return;
+        }
+  
+        // Step 2: Extract IV and ciphertext
+        let match = encryptedMessage.match(/IV:\s*(\w+)\s*Ciphertext:\s*([\w+/=]+)/);
+        if (!match) {
+          console.error("Invalid encrypted format. Decryption failed.");
+          return;
+        }
+  
+        let iv = match[1]; // Extracted IV
+        let ciphertext = match[2]; // Extracted encrypted content
+        
+        // Step 3: Decrypt the message
+        let decryptedText = AES_Decrypt(ciphertext, key, iv);
+  
+        var newWindow = window.open('', '_blank');
+        newWindow.document.write(decryptedText);
+        newWindow.document.close();
+  
+      } else {
+        console.error("Error retrieving email body:", result.error);
       }
-
-      // Step 2: Extract IV and ciphertext
-      let match = encryptedMessage.match(/IV:\s*(\w+)\s*Ciphertext:\s*([\w+/=]+)/);
-      if (!match) {
-        console.error("Invalid encrypted format. Decryption failed.");
-        return;
-      }
-
-      let iv = match[1]; // Extracted IV
-      let ciphertext = match[2]; // Extracted encrypted content
-      let key = "05c79cc15d40f8339eb7a11bd4a7bfea4e9f7ad5e4f22746b79f83b7e3e460e8"; // Key must match encryption key
-      let key2 = useFileContent();
-      // Step 3: Decrypt the message
-      let decryptedText = AES_Decrypt(ciphertext, key2, iv);
-
-      var newWindow = window.open('', '_blank');
-      newWindow.document.write(decryptedText);
-      newWindow.document.close();
-
-    } else {
-      console.error("Error retrieving email body:", result.error);
-    }
-  });
+    });
+  }
 }

@@ -7,7 +7,11 @@ This project is proof-of-concept for implementation of postquantum encryption in
 - developed with:
 - node.js v22.13.1
 - npm 10.9.2
-- manifest installation
+- npm and node are required for addin functionality in sideloaded installation:
+- open command line in Postquantum encryption folder
+1. npm install
+2. npm start
+3. install manifest.xml inside of Outlook client addin menu
 
 ## Usage:
 - project is run via webkit, so by npm start|stop commands
